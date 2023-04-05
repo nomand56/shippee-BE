@@ -71,16 +71,19 @@ const shippingController = {
                     value: +p.box.weight
                 },
                 dimensions: {
-                    length: +p.box.length,
-                    width: +p.box.width,
-                    height: +p.box.height,
-                    units: "IN"
+                    length: 43,
+                    width: 40,
+                    height: 65,
+                    units: "CM"
                 }
             };
         });
         const shippingData = {
             "accountNumber": {
                 "value": "121059770"
+            },
+            "rateRequestControlParameters": {
+                "returnTransitTimes": true
             },
             "requestedShipment": {
                 "shipper": {
@@ -94,6 +97,29 @@ const shippingController = {
                         "postalCode": recieverPostal,
                         "countryCode": reveiverCountry
                     }
+                },
+                "customsClearanceDetail": {
+                    "dutiesPayment": {
+                        "paymentType": "SENDER",
+                        "payor": {
+                            "responsibleParty": null
+                        }
+                    },
+                    "commodities": [
+                        {
+                            "description": "Camera",
+                            "quantity": 1,
+                            "quantityUnits": "PCS",
+                            "weight": {
+                                "units": "KG",
+                                "value": 20
+                            },
+                            "customsValue": {
+                                "amount": 100,
+                                "currency": "USD"
+                            }
+                        }
+                    ]
                 },
                 "pickupType": "DROPOFF_AT_FEDEX_LOCATION",
                 "shipDateStamp": date,
@@ -126,7 +152,8 @@ const shippingController = {
                     }
                 }
             );
-            const shippingRate = rateResponse.data.output.rateReplyDetails[0].ratedShipmentDetails[0].totalNetFedExCharge;
+            console.log("ship,",rateResponse)
+            const shippingRate = rateResponse.data.output.rateReplyDetails[0]
             res.json({ shippingRate });
         } catch (error) {
             console.error(error);
